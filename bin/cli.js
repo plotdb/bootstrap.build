@@ -15,7 +15,7 @@ argv = yargs.option('config', {
   alias: 'o',
   description: "output directory. default dist, if omitted.",
   type: 'string'
-}).help().alias('help', 'h').check(function(argv, options){
+}).help('help').alias('help', 'h').check(function(argv, options){
   if (!argv.c || !fs.existsSync(argv.c)) {
     throw new Error("config file directory missing.");
   }
@@ -25,9 +25,17 @@ vardir = argv.c;
 files = ['bootstrap.scss', 'bootstrap-grid.scss', 'bootstrap-reboot.scss'];
 outdir = argv.o != null ? argv.o : 'dist';
 originVarfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss");
-console.log(originVarfile);
 if (fs.existsSync(originVarfile)) {
   fs.renameSync(originVarfile, originVarfile + ".original");
+} else if (!fs.existsSync(originVarfile + ".original")) {
+  if (fs.existsSync("node_modules/bootstrap/scss/_variables.css")) {
+    originVarfile = "node_modules/bootstrap/scss/_variables.css";
+    fs.renameSync(originVarfile, originVarfile + ".original");
+  } else if (!fs.existsSync("node_modules/bootstrap/scss/_variables.css.original")) {
+    console.log("can't locate bootstrap module folder. did you install bootstrap?");
+    process.exit(-1);
+  }
+  originVarfile = "node_modules/bootstrap/scss/_variables.css.original";
 }
 originVarfile = originVarfile + ".original";
 varfile = path.join(vardir, "_variables.scss");

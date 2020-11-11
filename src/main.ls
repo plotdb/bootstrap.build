@@ -9,7 +9,7 @@ argv = yargs
     alias: \o
     description: "output directory. default dist, if omitted."
     type: \string
-  .help!
+  .help \help
   .alias \help, \h
   .check (argv, options) ->
     if !argv.c or !fs.exists-sync(argv.c) => throw new Error("config file directory missing.")
@@ -21,8 +21,16 @@ files = <[bootstrap.scss bootstrap-grid.scss bootstrap-reboot.scss]>
 outdir = if argv.o? => argv.o else \dist
 
 origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
-console.log origin-varfile
 if fs.exists-sync origin-varfile => fs.rename-sync origin-varfile, (origin-varfile + ".original")
+else if !fs.exists-sync(origin-varfile + ".original") =>
+  if fs.exists-sync "node_modules/bootstrap/scss/_variables.css" =>
+    origin-varfile = "node_modules/bootstrap/scss/_variables.css"
+    fs.rename-sync origin-varfile, (origin-varfile + ".original")
+  else if !fs.exists-sync("node_modules/bootstrap/scss/_variables.css.original") =>
+    console.log "can't locate bootstrap module folder. did you install bootstrap?"
+    process.exit -1
+  origin-varfile = "node_modules/bootstrap/scss/_variables.css.original"
+
 origin-varfile = origin-varfile + ".original"
 
 varfile = path.join(vardir, "_variables.scss")
