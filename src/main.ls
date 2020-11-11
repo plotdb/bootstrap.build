@@ -47,7 +47,7 @@ if twbs-root.1 =>
 twbs-root = twbs-root.0
 origin-varfile = path.join(twbs-root, "scss/_variables.scss.original")
 
-console.log "found bootstrap in #twbs-root]. "
+console.log "found bootstrap in #twbs-root. "
 
 /*
 origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
@@ -72,7 +72,7 @@ if !fs.exists-sync(varfile) => fs-extra.copy-sync origin-varfile, varfile
 files.map (fn) ->
   console.log "build #fn ..."
   code = node-sass.render-sync {
-    file: path.join(__dirname, "..", "node_modules/bootstrap/scss", fn)
+    file: path.join(twbs-root, "scss", fn)
     includePaths: [vardir]
     outputStyle: \expanded
     sourceMap: true

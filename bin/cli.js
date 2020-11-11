@@ -42,7 +42,7 @@ if (twbsRoot[1]) {
 }
 twbsRoot = twbsRoot[0];
 originVarfile = path.join(twbsRoot, "scss/_variables.scss.original");
-console.log("found bootstrap in " + twbsRoot + "]. ");
+console.log("found bootstrap in " + twbsRoot + ". ");
 /*
 origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
 if fs.exists-sync origin-varfile => fs.rename-sync origin-varfile, (origin-varfile + ".original")
@@ -66,7 +66,7 @@ files.map(function(fn){
   var code, codeMin;
   console.log("build " + fn + " ...");
   code = nodeSass.renderSync({
-    file: path.join(__dirname, "..", "node_modules/bootstrap/scss", fn),
+    file: path.join(twbsRoot, "scss", fn),
     includePaths: [vardir],
     outputStyle: 'expanded',
     sourceMap: true,
