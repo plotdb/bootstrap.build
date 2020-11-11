@@ -85,10 +85,10 @@ files.map (fn) ->
     sourceMap: true
     sourceMapInlineSources: true
   }).minify(code.css)
-  fs.write-file-sync path.join(outdir, fn.replace("scss","css")), code.css
-  fs.write-file-sync path.join(outdir, fn.replace("scss","min.css")), code-min.styles
+  fs.write-file-sync path.join(outdir, \css, fn.replace(\scss, \css)), code.css
+  fs.write-file-sync path.join(outdir, \css, fn.replace(\scss, \min.css)), code-min.styles
 
 console.log "generating json for variables ..."
 symbols = scss-symbols-parser.parse-symbols(fs.read-file-sync varfile .toString!)
 variables = symbols.variables.map -> it{name, value}
-fs.write-file-sync path.join(outdir, "variables.json"), JSON.stringify(variables)
+fs.write-file-sync path.join(outdir, \css, "variables.json"), JSON.stringify(variables)

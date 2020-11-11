@@ -82,8 +82,8 @@ files.map(function(fn){
     sourceMap: true,
     sourceMapInlineSources: true
   }).minify(code.css);
-  fs.writeFileSync(path.join(outdir, fn.replace("scss", "css")), code.css);
-  return fs.writeFileSync(path.join(outdir, fn.replace("scss", "min.css")), codeMin.styles);
+  fs.writeFileSync(path.join(outdir, 'css', fn.replace('scss', 'css')), code.css);
+  return fs.writeFileSync(path.join(outdir, 'css', fn.replace('scss', 'min.css')), codeMin.styles);
 });
 console.log("generating json for variables ...");
 symbols = scssSymbolsParser.parseSymbols(fs.readFileSync(varfile).toString());
@@ -93,4 +93,4 @@ variables = symbols.variables.map(function(it){
     value: it.value
   };
 });
-fs.writeFileSync(path.join(outdir, "variables.json"), JSON.stringify(variables));
+fs.writeFileSync(path.join(outdir, 'css', "variables.json"), JSON.stringify(variables));
