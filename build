@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+mkdir -p bin
+rm -f bin/cli.js
+echo "build src/main.ls -> bin/cli.js"
+echo "#!/usr/bin/env node" > bin/cli.js
+npx lsc -cbp src/main.ls >> bin/cli.js
+chmod 755 bin/cli.js
