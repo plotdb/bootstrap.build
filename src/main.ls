@@ -23,13 +23,13 @@ outdir = if argv.o? => argv.o else \dist
 origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
 if fs.exists-sync origin-varfile => fs.rename-sync origin-varfile, (origin-varfile + ".original")
 else if !fs.exists-sync(origin-varfile + ".original") =>
-  if fs.exists-sync "node_modules/bootstrap/scss/_variables.css" =>
-    origin-varfile = "node_modules/bootstrap/scss/_variables.css"
+  if fs.exists-sync "node_modules/bootstrap/scss/_variables.scss" =>
+    origin-varfile = "node_modules/bootstrap/scss/_variables.scss"
     fs.rename-sync origin-varfile, (origin-varfile + ".original")
-  else if !fs.exists-sync("node_modules/bootstrap/scss/_variables.css.original") =>
+  else if !fs.exists-sync("node_modules/bootstrap/scss/_variables.scss.original") =>
     console.log "can't locate bootstrap module folder. did you install bootstrap?"
     process.exit -1
-  origin-varfile = "node_modules/bootstrap/scss/_variables.css.original"
+  origin-varfile = "node_modules/bootstrap/scss/_variables.scss.original"
 
 origin-varfile = origin-varfile + ".original"
 

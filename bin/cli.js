@@ -28,14 +28,14 @@ originVarfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variabl
 if (fs.existsSync(originVarfile)) {
   fs.renameSync(originVarfile, originVarfile + ".original");
 } else if (!fs.existsSync(originVarfile + ".original")) {
-  if (fs.existsSync("node_modules/bootstrap/scss/_variables.css")) {
-    originVarfile = "node_modules/bootstrap/scss/_variables.css";
+  if (fs.existsSync("node_modules/bootstrap/scss/_variables.scss")) {
+    originVarfile = "node_modules/bootstrap/scss/_variables.scss";
     fs.renameSync(originVarfile, originVarfile + ".original");
-  } else if (!fs.existsSync("node_modules/bootstrap/scss/_variables.css.original")) {
+  } else if (!fs.existsSync("node_modules/bootstrap/scss/_variables.scss.original")) {
     console.log("can't locate bootstrap module folder. did you install bootstrap?");
     process.exit(-1);
   }
-  originVarfile = "node_modules/bootstrap/scss/_variables.css.original";
+  originVarfile = "node_modules/bootstrap/scss/_variables.scss.original";
 }
 originVarfile = originVarfile + ".original";
 varfile = path.join(vardir, "_variables.scss");
