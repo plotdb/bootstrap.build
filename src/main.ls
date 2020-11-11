@@ -65,7 +65,7 @@ origin-varfile = origin-varfile + ".original"
 
 varfile = path.join(vardir, "_variables.scss")
 
-fs-extra.ensure-dir-sync outdir
+fs-extra.ensure-dir-sync path.join(outdir, \css)
 fs-extra.ensure-dir-sync vardir
 if !fs.exists-sync(varfile) => fs-extra.copy-sync origin-varfile, varfile
 

@@ -58,7 +58,7 @@ else if !fs.exists-sync(origin-varfile + ".original") =>
 origin-varfile = origin-varfile + ".original"
 */
 varfile = path.join(vardir, "_variables.scss");
-fsExtra.ensureDirSync(outdir);
+fsExtra.ensureDirSync(path.join(outdir, 'css'));
 fsExtra.ensureDirSync(vardir);
 if (!fs.existsSync(varfile)) {
   fsExtra.copySync(originVarfile, varfile);
