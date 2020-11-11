@@ -1,4 +1,4 @@
-require! <[fs fs-extra path yargs node-sass clean-css]>
+require! <[fs fs-extra path yargs node-sass clean-css scss-symbols-parser]>
 
 argv = yargs
   .option \config, do
@@ -88,3 +88,7 @@ files.map (fn) ->
   fs.write-file-sync path.join(outdir, fn.replace("scss","css")), code.css
   fs.write-file-sync path.join(outdir, fn.replace("scss","min.css")), code-min.styles
 
+console.log "generating json for variables ..."
+symbols = scss-symbols-parser.parse-symbols(fs.read-file-sync varfile .toString!)
+variables = symbols.variables.map -> it{name, value}
+fs.write-file-sync path.join(outdir, "variables.json"), JSON.stringify(variables)
