@@ -20,6 +20,36 @@ vardir = argv.c
 files = <[bootstrap.scss bootstrap-grid.scss bootstrap-reboot.scss]>
 outdir = if argv.o? => argv.o else \dist
 
+
+twbs-roots = [
+  "node_modules/bootstrap"
+  path.join(__dirname, "..", "node_modules/bootstrap")
+]
+
+twbs-root = twbs-roots
+  .map (p) ->
+    f1 = fs.exists-sync path.join(p, "scss/_variables.scss")
+    f2 = fs.exists-sync path.join(p, "scss/_variables.scss.original")
+    return [p, f1, f2]
+  .filter (b) -> b.1 or b.2
+  .0
+
+if !twbs-root =>
+  console.log "can't locate bootstrap module folder. did you install bootstrap?"
+  process.exit -1
+
+if twbs-root.1 =>
+  fs.rename-sync(
+    path.join(twbs-root.0, "scss/_variables.scss"),
+    path.join(twbs-root.0, "scss/_variables.scss.original")
+  )
+
+twbs-root = twbs-root.0
+origin-varfile = path.join(twbs-root, "scss/_variables.scss.original")
+
+console.log "found bootstrap in #twbs-root]. "
+
+/*
 origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
 if fs.exists-sync origin-varfile => fs.rename-sync origin-varfile, (origin-varfile + ".original")
 else if !fs.exists-sync(origin-varfile + ".original") =>
@@ -30,8 +60,8 @@ else if !fs.exists-sync(origin-varfile + ".original") =>
     console.log "can't locate bootstrap module folder. did you install bootstrap?"
     process.exit -1
   origin-varfile = "node_modules/bootstrap/scss/_variables.scss.original"
-
 origin-varfile = origin-varfile + ".original"
+*/
 
 varfile = path.join(vardir, "_variables.scss")
 
