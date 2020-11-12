@@ -38,30 +38,10 @@ if !twbs-root =>
   console.log "can't locate bootstrap module folder. did you install bootstrap?"
   process.exit -1
 
-if twbs-root.1 =>
-  fs.rename-sync(
-    path.join(twbs-root.0, "scss/_variables.scss"),
-    path.join(twbs-root.0, "scss/_variables.scss.original")
-  )
-
 twbs-root = twbs-root.0
-origin-varfile = path.join(twbs-root, "scss/_variables.scss.original")
+origin-varfile = path.join(twbs-root, "scss/_variables.scss")
 
 console.log "found bootstrap in #twbs-root. "
-
-/*
-origin-varfile = path.join(__dirname, "..", "node_modules/bootstrap/scss/_variables.scss")
-if fs.exists-sync origin-varfile => fs.rename-sync origin-varfile, (origin-varfile + ".original")
-else if !fs.exists-sync(origin-varfile + ".original") =>
-  if fs.exists-sync "node_modules/bootstrap/scss/_variables.scss" =>
-    origin-varfile = "node_modules/bootstrap/scss/_variables.scss"
-    fs.rename-sync origin-varfile, (origin-varfile + ".original")
-  else if !fs.exists-sync("node_modules/bootstrap/scss/_variables.scss.original") =>
-    console.log "can't locate bootstrap module folder. did you install bootstrap?"
-    process.exit -1
-  origin-varfile = "node_modules/bootstrap/scss/_variables.scss.original"
-origin-varfile = origin-varfile + ".original"
-*/
 
 varfile = path.join(vardir, "_variables.scss")
 
@@ -71,9 +51,13 @@ if !fs.exists-sync(varfile) => fs-extra.copy-sync origin-varfile, varfile
 
 files.map (fn) ->
   console.log "build #fn ..."
+  code = """
+  @import "#{varfile}";
+  @import "#{path.join(twbs-root, \scss, fn)}";
+  """
   code = node-sass.render-sync {
-    file: path.join(twbs-root, "scss", fn)
-    includePaths: [vardir]
+    data: code
+    includePaths: ['.',path.join(twbs-root,\scss)]
     outputStyle: \expanded
     sourceMap: true
     sourceMapContents: true
@@ -89,6 +73,8 @@ files.map (fn) ->
   fs.write-file-sync path.join(outdir, \css, fn.replace(\scss, \min.css)), code-min.styles
 
 console.log "generating json for variables ..."
-symbols = scss-symbols-parser.parse-symbols(fs.read-file-sync varfile .toString!)
-variables = symbols.variables.map -> it{name, value}
+variables = (
+  scss-symbols-parser.parse-symbols(fs.read-file-sync origin-varfile .toString!).variables ++
+  scss-symbols-parser.parse-symbols(fs.read-file-sync varfile .toString!).variables
+).map -> it{name,value}
 fs.write-file-sync path.join(outdir, \css, "variables.json"), JSON.stringify(variables)
