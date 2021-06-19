@@ -16,7 +16,7 @@
   "dependencies": {
     "bootstrap": "^4.5.3",
     "clean-css-cli": "^4.3.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.0",
     "scss-symbols-parser": "^2.0.1"
   },
   "bin": {
