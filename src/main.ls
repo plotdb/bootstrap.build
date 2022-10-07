@@ -3,7 +3,7 @@ require! <[fs fs-extra path yargs node-sass clean-css scss-symbols-parser]>
 argv = yargs
   .option \config, do
     alias: \c
-    description: "dir for custom _variables.scss"
+    description: "dir for custom _variables.scss and other scss files"
     type: \string
   .option \output, do
     alias: \o
@@ -53,11 +53,11 @@ files.map (fn) ->
   console.log "build #fn ..."
   code = """
   @import "#{varfile}";
-  @import "#{path.join(twbs-root, \scss, fn)}";
+  @import "#{fn}";
   """
   code = node-sass.render-sync {
     data: code
-    includePaths: ['.',path.join(twbs-root,\scss)]
+    includePaths: [vardir, path.join(twbs-root,\scss)]
     outputStyle: \expanded
     sourceMap: true
     sourceMapContents: true

@@ -10,7 +10,7 @@ cleanCss = require('clean-css');
 scssSymbolsParser = require('scss-symbols-parser');
 argv = yargs.option('config', {
   alias: 'c',
-  description: "dir for custom _variables.scss",
+  description: "dir for custom _variables.scss and other scss files",
   type: 'string'
 }).option('output', {
   alias: 'o',
@@ -50,10 +50,10 @@ if (!fs.existsSync(varfile)) {
 files.map(function(fn){
   var code, codeMin;
   console.log("build " + fn + " ...");
-  code = "@import \"" + varfile + "\";\n@import \"" + path.join(twbsRoot, 'scss', fn) + "\";";
+  code = "@import \"" + varfile + "\";\n@import \"" + fn + "\";";
   code = nodeSass.renderSync({
     data: code,
-    includePaths: ['.', path.join(twbsRoot, 'scss')],
+    includePaths: [vardir, path.join(twbsRoot, 'scss')],
     outputStyle: 'expanded',
     sourceMap: true,
     sourceMapContents: true,
