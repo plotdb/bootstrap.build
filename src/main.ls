@@ -1,9 +1,9 @@
-require! <[fs fs-extra path yargs node-sass clean-css scss-symbols-parser]>
+require! <[fs fs-extra path yargs node-sass clean-css scss-symbols-parser @plotdb/colors]>
 
 argv = yargs
   .option \config, do
     alias: \c
-    description: "dir for custom _variables.scss and other scss files"
+    description: "dir for custom _custom.scss and other scss files"
     type: \string
   .option \output, do
     alias: \o
@@ -19,6 +19,9 @@ argv = yargs
 vardir = argv.c
 files = <[bootstrap.scss bootstrap-grid.scss bootstrap-reboot.scss]>
 outdir = if argv.o? => argv.o else \dist
+
+if fs.exists-sync path.join(vardir, '_variables.scss') =>
+  console.log "[warning] since 0.0.7, we use `_custom.scss` instead of `_variables.scss` unless you want to overwrite the default `_variables.scss` file completely, which is unlikely to happen.".yellow
 
 
 twbs-roots = [
@@ -43,7 +46,7 @@ origin-varfile = path.join(twbs-root, "scss/_variables.scss")
 
 console.log "found bootstrap in #twbs-root. "
 
-varfile = path.join(vardir, "_variables.scss")
+varfile = path.join(vardir, "_custom.scss")
 
 fs-extra.ensure-dir-sync path.join(outdir, \css)
 fs-extra.ensure-dir-sync vardir
